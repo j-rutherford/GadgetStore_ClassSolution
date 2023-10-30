@@ -17,6 +17,8 @@ namespace GadgetStore.UI.MVC
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
             builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+                .AddRoles<IdentityRole>()//added to register roles
+                .AddRoleManager<RoleManager<IdentityRole>>()//added to register role manager
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             builder.Services.AddControllersWithViews();
 
@@ -39,8 +41,8 @@ namespace GadgetStore.UI.MVC
 
             app.UseRouting();
 
-            app.UseAuthentication();
-            app.UseAuthorization();
+            app.UseAuthentication();//do I know you? (are you registered?)
+            app.UseAuthorization();//Do you have permission to see this page? (role verification)
 
             app.MapControllerRoute(
                 name: "default",
