@@ -1,0 +1,94 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    ViewData["Title"] = "Identity Framework Notes";
+}
+<section class="product_section gray-section pb-4 pt-4 mb-4">
+    <div class="heading_container heading_center">
+        <h2>
+            Identity <span>Framework</span>
+        </h2>
+    </div>
+</section>
+
+<section class="pb-4 pt-4 mb-4">
+    <p>
+        In this course we will discuss implementation of Identity Framework to add membership/security
+        to a data driven website. Identity Framework consists of Classes, routines, and MVC portions
+        that allow us to secure a website. Identity Framework is sometimes referred to as ONE IDENTITY, or MS
+        ONE IDENTITY.
+    </p>
+    <p>
+        Steps to implement Identity Framework in your project
+        <ul>
+            <li>
+                <strong>Step 1) </strong> update your DefaultConnection in appsettings.json.  
+                <ul>
+                    <li>
+                        <em>Server </em> is the DB Server that houses your database (for local DBs, we use .\sqlexpress)
+                    </li>
+                    <li>
+                        <em>Database </em> is the name of your Database within the server (examples: Northwind, Core2, StoreFront...)
+                    </li>
+                </ul>
+                
+            </li>
+            <li>
+                <strong>Step 2) </strong> Register the service in Program.cs
+            </li>
+            <li>
+                <strong>Step 3) </strong> Open Package Manager Console and type <code>Update-Database</code>, then hit enter.  This will allow Identity to create the necessary tables in your DB.
+            </li>
+            <li>
+                <strong>Step 4) </strong> Add views for Identity.
+                <ul>
+                    <li>In your UI project, expand Areas</li>
+                    <li>
+                        Right click the <em>Identity</em> folder
+                    </li>
+                    <li>
+                        Add New Scaffolded Item
+                    </li>
+                    <li>
+                        Select <em>Identity</em> from the left menu
+                    </li>
+                    <li>
+                        Select Identity -> Add
+                    </li>
+                    <li>Check the box <em>Override all files</em></li>
+                    <li>
+                        <em>Data Context Class </em> -> ApplicationDbContext -> Add
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </p>
+    <p>
+        The Identity Framework package adds numerous files and folders to your solution when run.  These include Razor Pages and Areas dedicated to managing
+        users and login/registration functionality.  The most important thing to remember is that Identity Framework will need an avenue to connect to your
+        database and store user info - the DefaultConnection in appsettings.json MUST point to your DB.  The only downside to this package - it does not offer a
+        way to manage Users and Roles as an Administrator, so this is something we will need to do some additional work to obtain this functionality.
+        (See AdministrationController.cs, AdministrationViewModel.cs, Views/Administration)
+        <ul>
+            <li>
+                <strong>appsettings.json</strong> must contain the DefaultConnection, which must reference your DB Server and DB Name.
+            </li>
+            <li>
+                <strong>Program.cs</strong> must be modified to register the Identity service with your application, and to allow the customization needed to include Administration.
+            </li>
+            <li>
+                <strong>Areas -> Identity -> Pages</strong> - Houses a folder (Account) with the necessary Razor Pages for registering, login, and account management,
+                as well as _ViewStart and _ViewImports.
+            </li>
+            <li>
+                <strong>Controllers -> AdministrationController.cs</strong> - Contains Actions, IdentityUser, and IdentityRole objects used to manage Users and Roles.
+            </li>
+            <li>
+                <strong>Models -> AdministrationViewModel.cs</strong> - the class with which we are able to display, create, and edit User accounts within our app.
+            </li>
+        </ul>
+    </p>
+
+
+</section>
