@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.7.34031.279
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GadgetStore.UI.MVC", "GadgetStore.UI.MVC\GadgetStore.UI.MVC.csproj", "{3AB70C74-549F-4ABF-BD6B-1AE0150697A6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GadgetStore.DATA.EF", "GadgetStore.DATA.EF\GadgetStore.DATA.EF.csproj", "{A75A9D56-8C67-445A-A0D7-54AD4226901A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3AB70C74-549F-4ABF-BD6B-1AE0150697A6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3AB70C74-549F-4ABF-BD6B-1AE0150697A6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3AB70C74-549F-4ABF-BD6B-1AE0150697A6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3AB70C74-549F-4ABF-BD6B-1AE0150697A6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A75A9D56-8C67-445A-A0D7-54AD4226901A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A75A9D56-8C67-445A-A0D7-54AD4226901A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A75A9D56-8C67-445A-A0D7-54AD4226901A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A75A9D56-8C67-445A-A0D7-54AD4226901A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {0378294A-FBAD-4E28-8780-31FD5519D0AD}
+	EndGlobalSection
+EndGlobal
