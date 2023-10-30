@@ -399,3 +399,6 @@ FodyWeavers.xsd
 
 # Protect sensitive info
 /GadgetStore.UI.MVC/appsettings.json
+
+# ditch the archive
+/GadgetStore.UI.MVC/_Archive/

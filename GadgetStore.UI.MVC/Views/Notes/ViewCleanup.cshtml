@@ -1,0 +1,112 @@
+﻿@{
+    ViewData["Title"] = "View Cleanup Notes";
+}
+<section class="product_section gray-section pb-4 pt-4 mb-4">
+    <div class="heading_container heading_center">
+        <h2>
+            View <span>Cleanup</span>
+        </h2>
+    </div>
+</section>
+
+
+<section class="pb-4 pt-4 mb-4">
+    <p>
+        After scaffolding Controllers and Views with Entity Framework we gain an Index, Create, Edit, Details, and Delete view for each Controller that was scaffolded.
+        The code in these views is nearly identical across each controller.  This requires some cleanup on our part to make the views unique and user-friendly.
+        The customizations/cleanup you do on views in your projects are all contextual - there is never a single solution to making your view 'correct.'  There are
+        some best practices to follow when starting out though, which are detailed below.
+    </p>
+    <p>
+        <strong>View Cleanup 101</strong>
+        <ul>
+            <li>
+                <p><strong>Index Views</strong></p>
+                <ul>
+                    <li>
+                        <p><strong>ViewData["Title"]</strong> should be updated with an appropriate title for your page.</p>
+                    </li>
+                    <li>
+                        <p>
+                            <strong>Page Headers</strong> (h1, h2, h3...) should be updated with appropriate verbiage (or removed if they are not necessary)
+                        </p>
+                    </li>
+                    <li>
+                        <p><strong>Button text </strong> should be updated with appropriate verbiage.  This applies to ALL buttons on the page (Create, Edit, Details, Delete...)</p>
+                        <p>
+                            <ul>
+                                <li>
+                                    Example: <code>Create New</code> is the default -> update to something like <code>Add New Product</code>
+                                </li>
+                            </ul>
+                        </p>
+                    </li>
+                    <li>
+                        <p><strong>Remove unnecessary columns</strong> from the &lt;table&gt;</p>
+                        <p>
+                            <ul>
+                                <li>
+                                    Remove the <code>&lt;th&gt;</code> tags for the column from the <code>&lt;thead&gt;</code>, as well as the <code>&lt;td&gt;</code> tags from the <code>&lt;tbody&gt;</code>
+                                </li>
+                            </ul>
+                        </p>
+                    </li>
+                </ul>
+
+            </li>
+            <li>
+                <p>
+                    <strong>Create & Edit Views</strong>
+                </p>
+                <ul>
+                    <li>
+                        <p>
+                            <strong>ViewData["Title"]</strong> should be updated with an appropriate title for your page.
+                        </p>
+                    </li>
+                    <li>
+                        <p>
+                            <strong>Page Headers</strong> (h1, h2, h3...) should be updated with appropriate verbiage (or removed if they are not necessary)
+                        </p>
+                    </li>
+                    <li>
+                        <p>
+                            <strong>Dropdown List Labels</strong> should be updated to indicate what is being selected
+                        </p>
+                    </li>
+                    <li>
+                        <p>
+                            <strong>Button text </strong> should be updated with appropriate verbiage.
+                        </p>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <p>
+                    <strong>Details & Delete Views</strong>
+                </p>
+                <ul>
+                    <li>
+                        <p>
+                            <strong>ViewData["Title"]</strong> should be updated with an appropriate title for your page.
+                        </p>
+                    </li>
+                    <li>
+                        <p>
+                            <strong>Page Headers</strong> (h1, h2, h3...) should be updated with appropriate verbiage (or removed if they are not necessary)
+                        </p>
+                    </li>
+                    <li>
+                        <p>
+                            <strong>Button text </strong> should be updated with appropriate verbiage.
+                        </p>
+                    </li>
+                </ul>
+            </li>
+
+
+
+        </ul>
+    </p>
+
+</section>

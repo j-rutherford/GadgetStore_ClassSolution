@@ -1,0 +1,114 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    ViewData["Title"] = "Security Notes";
+}
+<section class="product_section gray-section pb-4 pt-4 mb-4">
+    <div class="heading_container heading_center">
+        <h2>
+            Authorization / <span>Authentication</span>
+        </h2>
+    </div>
+</section>
+
+<section class="pb-4 pt-4 mb-4">
+    <p>
+        Security is comprised of 2 separate concepts. Authentication and Authorization. Authentication
+        is "you are who you say you are." and is typically done with verification of a UserID and a password
+        combination. Authorization refers to the access that you granted or what you are "authorized" to view.
+        If you arrive a website and are browsing you are considered to be an "Anonymous or Unauthenticated" user.
+        We have the capability to code security based on this lack of credentials, in addition to being able
+        to code to a set of credentials (your authenticated account).
+    </p>
+    <p>
+        In order to Authenticate a user, a UserID must be established. For authorization it is best to
+        establish roles and then add users with like capabilities to the defined roles. Once that is done
+        you can authorize based on the role name instead of individual users.
+    </p>
+    <p>
+        <strong>Users vs Roles</strong> - users are individuals who have authentication credentials stored in the database
+        for the website. We can access them by their UserName (emailAddress) or their UserID (alpha-numeric GUID
+        - Global Unique IDentifier). If users do not have authentication credentials, then they are referred
+        to as Anonymous or Unauthenticated. Roles are used to group users with the same Access Rules. If you
+        have a new level of access required, then a new role should be created and ANY user who should have
+        that specified access should be added to that role. (users EDIT).
+    </p>
+    <p>
+        <h3>Exmaple usage in a Controller</h3> 
+        <ul>
+            <li>
+                Lock down an ENTIRE controller so ONLY administrators can access the actions within.  Uses the <code>[Authorize]</code> attribute on the CLASS.
+                <pre>
+                    <code>
+        [Authorize(Roles = "Admin")]
+        public class ProductsController : Controller
+        {
+                    </code>
+                </pre>
+            </li>
+            <li>
+                Lock down an action so ONLY administrators can access.  Uses the <code>[Authorize]</code> attribute on the ACTION.
+                <pre>
+                    <code>
+        // GET: Products/Create
+        [Authorize(Roles = "Admin")]
+        public IActionResult Create()
+        {
+            ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "CategoryId");
+            ViewData["SupplierId"] = new SelectList(_context.Suppliers, "SupplierId", "SupplierId");
+            return View();
+        }
+                    </code>
+                </pre>
+            </li>
+            <li>
+                Allow ANY user access with <code>[AllowAnonymous]</code>
+                <pre>
+                    <code>
+        // GET: Products
+        [AllowAnonymous]
+        public async Task<IActionResult> Index()
+        {
+            var core2Context = _context.Products.Include(p => p.Category).Include(p => p.Supplier);
+            return View(await core2Context.ToListAsync());
+        }
+                    </code>
+                </pre>
+            </li>
+        </ul>
+    </p>
+
+    <p>
+        <h3>Example ussage in a View</h3>
+        <ul>
+            <li>
+                Only allow users who are logged in to access content - Example from _Layout
+                <pre>
+                    <code>
+         &commat;if (SignInManager.IsSignedIn(User))
+         {
+             &lt;li class="nav-item"&gt;
+                 &lt;a class="nav-link" asp-controller="Orders" asp-action="Index"&gt;Orders&lt;/a&gt;
+             &lt;/li&gt;
+         }
+                    </code>
+                </pre>
+            </li>
+
+            <li>
+                Only allow admins to see a create button - Example from Products/Index.cshtml
+                <pre>
+                    <code>
+          &commat;if (User.IsInRole("Admin"))
+          {
+              &lt;p&gt;
+                  &lt;a asp-action="Create"&gt;Create New&lt;/a&gt;
+              &lt;/p&gt;
+          }
+                    </code>
+                </pre>
+            </li>
+        </ul>
+    </p>
+</section>
