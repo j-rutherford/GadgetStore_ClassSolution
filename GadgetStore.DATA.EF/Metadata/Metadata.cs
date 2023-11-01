@@ -110,7 +110,7 @@ namespace GadgetStore.DATA.EF.Models//.Metadata
 
         [Required]
         [Range(0, (double)decimal.MaxValue)]
-        [DisplayFormat(DataFormatString = "{0:c}", ApplyFormatInEditMode = true)]
+        [DisplayFormat(DataFormatString = "{0:c}", ApplyFormatInEditMode = false)]
         [Display(Name = "Price")]
         [DataType(DataType.Currency)]
         [DefaultValue(0)]
@@ -151,6 +151,7 @@ namespace GadgetStore.DATA.EF.Models//.Metadata
         [Display(Name = "Supplier")]
         [Required]
         [StringLength(200)]
+        [DisplayFormat(NullDisplayText = "[No Supplier]")]
         public string SupplierName { get; set; } = null!;
 
         [Required]

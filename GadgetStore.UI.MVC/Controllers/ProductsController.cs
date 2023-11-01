@@ -21,8 +21,69 @@ namespace GadgetStore.UI.MVC.Controllers
         // GET: Products
         public async Task<IActionResult> Index()
         {
-            var gadgetStoreContext = _context.Products.Include(p => p.Category).Include(p => p.Supplier);
-            return View(await gadgetStoreContext.ToListAsync());
+            #region LINQ Notes
+            /*
+             * Language INtegrated Query (LINQ)
+             * - LINQ is a standardized syntax/set of methods that allow us to operate on collections in C# just as we would
+             * a SQL result set.  We can filter, group, select, etc...
+             * 
+             * SYNTAX EXAMPLE
+             * var [filteredCollection] = _context.[Entity].Where([otf] => [otf].[Property] [[Condition]]).ToListAsync();
+             * 
+             * - filteredCollection --> the resulting collection once you filter out records you do not need
+             * - Entity --> the specific DB table you are retrieving results from
+             * - otf --> an on-the-fly variable created by you to represent a single Entity from the table
+             * - Property --> the property from the Entity to be evaluated in the condition
+             * - Condition --> your filter criteria
+             * */
+            #endregion
+            var products = _context.Products
+                .Where(p => !p.IsDiscontinued)// SELECT * FROM Products p WHERE p.IsDiscontinued <> 0
+                .Include(p => p.Category)// JOIN Categories ON Category
+                .Include(p => p.Supplier)// JOIN Suppliers ON Supplier
+                .Include(p => p.OrderProducts);//JOIN OrderProducts 
+
+            #region other linq examples
+            //Eventually, filters like these will be applied by the user when we implement search/filter functionality
+
+            //only show weapons
+            //var products = _context.Products
+            //    .Where(p => p.Category.CategoryName.ToLower().Contains("weapon"))// LIKE '%weapon%'
+            //    .Include(p => p.Category)
+            //    .Include(p => p.Supplier);
+
+            //Show products made by marvelous artifacts
+            //var products = _context.Products
+            //    .Where(p => p.Supplier.SupplierName.Contains("marvelous artifacts"))//LinqToEF is case insensitive
+            //    .Include(p => p.Category)
+            //    .Include(p => p.Supplier);
+
+            //Show products that are both out of stock and pending order.
+            //var products = _context.Products
+            //    .Where(p => p.UnitsInStock == 0 && p.UnitsOnOrder > 0)
+            //    .Include(p => p.Category)
+            //    .Include(p => p.Supplier);
+
+            //MINI LAB!
+            ////Show products that cost more than $500
+            //var products1 = _context.Products
+            //    .Where(p => p.ProductPrice > 500)
+            //    .Include(p => p.Category)
+            //    .Include(p => p.Supplier);
+
+            ////Show all products that are a 'Tool' from 'United Federation of Planets'
+            //var products2 = _context.Products
+            //    .Where(p => p.Category.CategoryName.Contains("tool") && p.Supplier.SupplierName.Contains("united federation of planets"))
+            //    .Include(p => p.Category)
+            //    .Include(p => p.Supplier);
+            ////Show all products that contain the word 'star' in the name
+            //var products3 = _context.Products
+            //    .Where(p => p.ProductName.Contains("star"))
+            //    .Include(p => p.Category)
+            //    .Include(p => p.Supplier);
+            #endregion
+
+            return View(await products.ToListAsync());
         }
 
         // GET: Products/Details/5
@@ -160,14 +221,14 @@ namespace GadgetStore.UI.MVC.Controllers
             {
                 _context.Products.Remove(product);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool ProductExists(int id)
         {
-          return (_context.Products?.Any(e => e.ProductId == id)).GetValueOrDefault();
+            return (_context.Products?.Any(e => e.ProductId == id)).GetValueOrDefault();
         }
     }
 }
