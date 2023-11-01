@@ -1,0 +1,43 @@
+﻿@model IEnumerable<GadgetStore.DATA.EF.Models.Category>
+
+@{
+    ViewData["Title"] = "Categories";
+}
+
+<h1>@ViewBag.Title</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">Add New Category</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.CategoryName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CategoryDescription)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    <a asp-action="Details" asp-route-id="@item.CategoryId">
+                        @Html.DisplayFor(modelItem => item.CategoryName)
+                    </a>
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CategoryDescription)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.CategoryId">Edit</a> |
+                    <a asp-action="Delete" asp-route-id="@item.CategoryId">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
