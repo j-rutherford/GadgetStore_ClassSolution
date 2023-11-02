@@ -45,6 +45,7 @@ namespace GadgetStore.DATA.EF.Models//.Metadata
         [StringLength(500)]
         [Display(Name = "Description")]
         [Unicode(false)]
+        [UIHint("MultilineText")]//generated a <textarea> instead of an <input>
         public string? CategoryDescription { get; set; }
 
         //navigation props will ALWAYS be virtual. Usually, we exclude these from the metadata.

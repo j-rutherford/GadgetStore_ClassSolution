@@ -9,9 +9,13 @@
     <div class="heading_container heading_center">
         <h2>Our <span>Products</span></h2>
         <p align="center">
-            <span>
-                <a asp-action="Create">Add New Product</a>
-            </span>
+            @if (User.IsInRole("Admin"))
+            {
+                <span>
+                    <a asp-action="Create">Add New Product</a> |
+                </span>
+            }
+            <a asp-action="TiledProducts">Tile View</a>
         </p>
     </div>
 </section>
@@ -48,7 +52,10 @@
                 <th>
                     @Html.DisplayNameFor(model => model.Supplier)
                 </th>
-                <th></th>
+                @if (User.IsInRole("Admin"))
+                {
+                    <th></th>
+                }
             </tr>
         </thead>
         <tbody>
@@ -85,24 +92,27 @@
                     <td>
                         @Html.DisplayFor(modelItem => item.Supplier.SupplierName)
                     </td>
-                    <td>
-                        <a asp-action="Edit" asp-route-id="@item.ProductId">Edit</a> |
-                        @* <a asp-action="Details" asp-route-id="@item.ProductId">Details</a> | *@
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <td>
+                            <a asp-action="Edit" asp-route-id="@item.ProductId">Edit</a> |
+                            @* <a asp-action="Details" asp-route-id="@item.ProductId">Details</a> | *@
 
-                        @*
+                            @*
                     Conditional Delete Availability
                     - Only allow users to click on the delete button if the product is not directly related to any orders.
                     *@
-                        @if (item.OrderProducts.Any())
-                        {
-                            <a disabled="true" class="text-danger"><s>Delete</s></a>
-                            //del or s tags for strikethrough
-                        }
-                        else
-                        {
-                            <a asp-action="Delete" asp-route-id="@item.ProductId">Delete</a>
-                        }
-                    </td>
+                            @if (item.OrderProducts.Any())
+                            {
+                                <a disabled="true" class="text-danger"><s>Delete</s></a>
+                                //del or s tags for strikethrough
+                            }
+                            else
+                            {
+                                <a asp-action="Delete" asp-route-id="@item.ProductId">Delete</a>
+                            }
+                        </td>
+                    }
                 </tr>
             }
         </tbody>

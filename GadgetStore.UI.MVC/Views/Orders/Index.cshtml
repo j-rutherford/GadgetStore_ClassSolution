@@ -5,10 +5,12 @@
 }
 
 <h1>@ViewBag.Title</h1>
-
-<p>
-    <a asp-action="Create">Add New Order</a> <!-- This will be deleted later... -->
-</p>
+@if (User.IsInRole("Admin") || User.IsInRole("Demo"))
+{
+    <p>
+        <a asp-action="Create">Add New Order</a> <!-- This will be deleted later... -->
+    </p>
+}
 <table class="table">
     <thead>
         <tr>
@@ -30,7 +32,11 @@
             <th>
                 @Html.DisplayNameFor(model => model.User)
             </th>
-            <th></th>
+            @if (User.IsInRole("Admin"))
+            {
+                //must hide column headers as well because javascript hates tables that don't line up
+                <th></th>
+            }
         </tr>
     </thead>
     <tbody>
@@ -57,11 +63,14 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.User.UserId)
                 </td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.OrderId">Edit</a> |
-                    @* <a asp-action="Details" asp-route-id="@item.OrderId">Details</a> | *@
-                    <a asp-action="Delete" asp-route-id="@item.OrderId">Delete</a>
-                </td>
+                @if (User.IsInRole("Admin"))
+                {
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.OrderId">Edit</a> |
+                        @* <a asp-action="Details" asp-route-id="@item.OrderId">Details</a> | *@
+                        <a asp-action="Delete" asp-route-id="@item.OrderId">Delete</a>
+                    </td>
+                }
             </tr>
         }
     </tbody>

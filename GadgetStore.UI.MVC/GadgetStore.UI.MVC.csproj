@@ -10,9 +10,6 @@
 
 
   <ItemGroup>
-    <Content Remove="wwwroot\about.html" />
-    <Content Remove="wwwroot\blog_list.html" />
-    <Content Remove="wwwroot\contact.html" />
     <Content Remove="wwwroot\css\bootstrap.css" />
     <Content Remove="wwwroot\css\font-awesome.min.css" />
     <Content Remove="wwwroot\css\responsive.css" />
@@ -105,8 +102,6 @@
     <Content Remove="wwwroot\js\custom.js" />
     <Content Remove="wwwroot\js\jquery-3.4.1.min.js" />
     <Content Remove="wwwroot\js\popper.min.js" />
-    <Content Remove="wwwroot\product.html" />
-    <Content Remove="wwwroot\testimonial.html" />
   </ItemGroup>
 
   <ItemGroup>
@@ -132,9 +127,6 @@
     <None Include="Views\Shared\_ValidationScriptsPartial.cshtml" />
     <None Include="Views\_ViewImports.cshtml" />
     <None Include="Views\_ViewStart.cshtml" />
-    <None Include="wwwroot\about.html" />
-    <None Include="wwwroot\blog_list.html" />
-    <None Include="wwwroot\contact.html" />
     <None Include="wwwroot\css\bootstrap.css" />
     <None Include="wwwroot\css\font-awesome.min.css" />
     <None Include="wwwroot\css\responsive.css" />
@@ -227,8 +219,6 @@
     <None Include="wwwroot\js\custom.js" />
     <None Include="wwwroot\js\jquery-3.4.1.min.js" />
     <None Include="wwwroot\js\popper.min.js" />
-    <None Include="wwwroot\product.html" />
-    <None Include="wwwroot\testimonial.html" />
   </ItemGroup>
 
   <ItemGroup>

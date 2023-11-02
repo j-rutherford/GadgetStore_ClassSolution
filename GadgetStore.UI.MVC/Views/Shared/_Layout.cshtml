@@ -1,4 +1,7 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> signInManager
+
+<!DOCTYPE html>
 <html>
 <head>
     <!-- Basic -->
@@ -50,23 +53,35 @@
                                     <li><a asp-action="ViewCleanup" asp-controller="Notes">View Cleanup</a></li>
                                 </ul>
                             </li>
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="true">
-                                    <span class="nav-label">Admin <span class="caret"></span></span>
-                                </a>
-                                <ul class="dropdown-menu">
-                                    <li><a asp-action="ListUsers" asp-controller="Administration">Users</a></li>
-                                    <li><a asp-action="ListRoles" asp-controller="Administration">Roles</a></li>
-                                    <li><a asp-action="Index" asp-controller="Suppliers">Suppliers</a></li>
-                                    <li><a asp-action="Index" asp-controller="Categories">Categories</a></li>
-                                </ul>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" asp-action="Index" asp-controller="Products">Products</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" asp-action="Index" asp-controller="Orders">Orders</a>
-                            </li>
+                            @if (User.IsInRole("Admin"))
+                            {
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="true">
+                                        <span class="nav-label">Admin <span class="caret"></span></span>
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li><a asp-action="ListUsers" asp-controller="Administration">Users</a></li>
+                                        <li><a asp-action="ListRoles" asp-controller="Administration">Roles</a></li>
+                                        <li><a asp-action="Index" asp-controller="Suppliers">Suppliers</a></li>
+                                        <li><a asp-action="Index" asp-controller="Categories">Categories</a></li>
+                                    </ul>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-action="Index" asp-controller="Products">Products</a>
+                                </li>
+                            }
+                            else
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-action="TiledProducts" asp-controller="Products">Shop</a>
+                                </li>
+                            }
+                            @if (signInManager.IsSignedIn(User))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-action="Index" asp-controller="Orders">Orders</a>
+                                </li>
+                            }
                             <li class="nav-item">
                                 <a class="nav-link" href="~/contact.html">Contact</a>
                             </li>

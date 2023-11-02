@@ -6,9 +6,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using GadgetStore.DATA.EF.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace GadgetStore.UI.MVC.Controllers
 {
+    [Authorize(Roles="Admin")]
     public class CategoriesController : Controller
     {
         private readonly GadgetStoreContext _context;

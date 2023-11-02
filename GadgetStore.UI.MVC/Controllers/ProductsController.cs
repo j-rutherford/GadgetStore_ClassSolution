@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using GadgetStore.DATA.EF.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace GadgetStore.UI.MVC.Controllers
 {
@@ -85,6 +86,17 @@ namespace GadgetStore.UI.MVC.Controllers
 
             return View(await products.ToListAsync());
         }
+        public async Task<IActionResult> TiledProducts()
+        {
+            var products = _context.Products
+                .Where(p => !p.IsDiscontinued)// SELECT * FROM Products p WHERE p.IsDiscontinued <> 0
+                .Include(p => p.Category)// JOIN Categories ON Category
+                .Include(p => p.Supplier)// JOIN Suppliers ON Supplier
+                .Include(p => p.OrderProducts);//JOIN OrderProducts 
+
+            return View(await products.ToListAsync());
+        }
+
 
         // GET: Products/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -107,6 +119,7 @@ namespace GadgetStore.UI.MVC.Controllers
         }
 
         // GET: Products/Create
+        [Authorize(Roles = "Admin")]
         public IActionResult Create()
         {
             ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "CategoryName");
@@ -119,6 +132,7 @@ namespace GadgetStore.UI.MVC.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Create([Bind("ProductId,ProductName,ProductPrice,ProductDescription,UnitsInStock,UnitsOnOrder,IsDiscontinued,CategoryId,SupplierId,ProductImage")] Product product)
         {
             if (ModelState.IsValid)
@@ -133,6 +147,7 @@ namespace GadgetStore.UI.MVC.Controllers
         }
 
         // GET: Products/Edit/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.Products == null)
@@ -155,6 +170,7 @@ namespace GadgetStore.UI.MVC.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int id, [Bind("ProductId,ProductName,ProductPrice,ProductDescription,UnitsInStock,UnitsOnOrder,IsDiscontinued,CategoryId,SupplierId,ProductImage")] Product product)
         {
             if (id != product.ProductId)
@@ -188,6 +204,7 @@ namespace GadgetStore.UI.MVC.Controllers
         }
 
         // GET: Products/Delete/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.Products == null)
@@ -210,6 +227,7 @@ namespace GadgetStore.UI.MVC.Controllers
         // POST: Products/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             if (_context.Products == null)
@@ -225,7 +243,6 @@ namespace GadgetStore.UI.MVC.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
-
         private bool ProductExists(int id)
         {
             return (_context.Products?.Any(e => e.ProductId == id)).GetValueOrDefault();

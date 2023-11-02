@@ -6,9 +6,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using GadgetStore.DATA.EF.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace GadgetStore.UI.MVC.Controllers
 {
+    [Authorize]
     public class OrdersController : Controller
     {
         private readonly GadgetStoreContext _context;
@@ -45,6 +47,7 @@ namespace GadgetStore.UI.MVC.Controllers
         }
 
         // GET: Orders/Create
+        [Authorize(Roles="Admin,Demo")]
         public IActionResult Create()
         {
             ViewData["UserId"] = new SelectList(_context.UserDetails, "UserId", "UserId");
@@ -56,6 +59,7 @@ namespace GadgetStore.UI.MVC.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Create([Bind("OrderId,UserId,OrderDate,ShipToName,ShipCity,ShipState,ShipZip")] Order order)
         {
             if (ModelState.IsValid)

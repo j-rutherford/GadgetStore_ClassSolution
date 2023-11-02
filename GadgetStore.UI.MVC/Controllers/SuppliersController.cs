@@ -6,9 +6,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using GadgetStore.DATA.EF.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace GadgetStore.UI.MVC.Controllers
 {
+    [Authorize(Roles ="Admin")]
     public class SuppliersController : Controller
     {
         private readonly GadgetStoreContext _context;
@@ -19,6 +21,7 @@ namespace GadgetStore.UI.MVC.Controllers
         }
 
         // GET: Suppliers
+        //[AllowAnonymous]
         public async Task<IActionResult> Index()
         {
               return _context.Suppliers != null ? 
