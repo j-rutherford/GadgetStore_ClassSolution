@@ -7,16 +7,20 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using GadgetStore.DATA.EF.Models;
 using Microsoft.AspNetCore.Authorization;
+using System.Drawing;//added for file upload
+using GadgetStore.UI.MVC.Utilities;//added for image resize utility
 
 namespace GadgetStore.UI.MVC.Controllers
 {
     public class ProductsController : Controller
     {
         private readonly GadgetStoreContext _context;
+        private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public ProductsController(GadgetStoreContext context)
+        public ProductsController(GadgetStoreContext context, IWebHostEnvironment webHostEnvironment)
         {
             _context = context;
+            _webHostEnvironment = webHostEnvironment;
         }
 
         // GET: Products
@@ -133,10 +137,57 @@ namespace GadgetStore.UI.MVC.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> Create([Bind("ProductId,ProductName,ProductPrice,ProductDescription,UnitsInStock,UnitsOnOrder,IsDiscontinued,CategoryId,SupplierId,ProductImage")] Product product)
+        public async Task<IActionResult> Create([Bind("ProductId,ProductName,ProductPrice,ProductDescription,UnitsInStock,UnitsOnOrder,IsDiscontinued,CategoryId,SupplierId,ProductImage,Image")] Product product) //added Image to the Bind properties
         {
             if (ModelState.IsValid)
             {
+                #region File Upload - CREATE
+                if (product.Image == null)
+                {
+                    product.ProductImage = "noimage.png";
+                    //goto end;//a new form of flow control. jumps to the section with the name "end:"
+                }
+                else
+                {
+                    //else, a file was uploaded
+                    //check the file type
+                    string ext = Path.GetExtension(product.Image.FileName);
+                    List<string> validExt = new() { ".jpeg", ".jpg", ".gif", ".png" };
+                    // verfiy the uploaded file has an extension matching one of the valid extensions
+                    if (validExt.Contains(ext.ToLower()) && product.Image.Length < 4_194_303)
+                    {
+                        //Generate a unique filename
+                        product.ProductImage = Guid.NewGuid() + ext;
+
+                        //save the image file to the web server
+                        //path to webroot
+                        string webrootPath = _webHostEnvironment.WebRootPath;
+                        string fullImagePath = webrootPath + "/images/";
+
+                        //Create a MemoryStream to read the image into the server memory
+                        using (var memoryStream = new MemoryStream())
+                        {
+                            await product.Image.CopyToAsync(memoryStream);//transferring from object to server memory
+                            using (var img = Image.FromStream(memoryStream))
+                            {
+                                //only do this if you're uploading images.
+                                //Image utility 
+                                //1) (int) max image size
+                                //2) (int) max thumbnail size
+                                //3) (string) full path
+                                //4) (Image) an image
+                                //5) (string) filename
+                                int maxImage = 500;//in pixels
+                                int maxThumbSize = 100;//in pixels
+                                ImageUtilities.ResizeImage(fullImagePath, product.ProductImage, img, maxImage, maxThumbSize);
+                                //for NOT images:
+                                //fileName.Save("path/to/folder","filename");
+                            }
+                        }
+                    }
+                }
+                #endregion
+                //end:
                 _context.Add(product);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -171,7 +222,7 @@ namespace GadgetStore.UI.MVC.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> Edit(int id, [Bind("ProductId,ProductName,ProductPrice,ProductDescription,UnitsInStock,UnitsOnOrder,IsDiscontinued,CategoryId,SupplierId,ProductImage")] Product product)
+        public async Task<IActionResult> Edit(int id, [Bind("ProductId,ProductName,ProductPrice,ProductDescription,UnitsInStock,UnitsOnOrder,IsDiscontinued,CategoryId,SupplierId,ProductImage,Image")] Product product) //added Image to Bind list
         {
             if (id != product.ProductId)
             {
@@ -180,6 +231,38 @@ namespace GadgetStore.UI.MVC.Controllers
 
             if (ModelState.IsValid)
             {
+                #region File Upload - Edit
+                //save the old image name so we can delete if necessary
+                string? oldImageName = product.ProductImage;
+                if (product.Image != null)
+                {
+                    string ext = Path.GetExtension(product.Image.FileName);
+                    //list valid extensions:
+                    List<string> validExts = new() { ".jpeg", ".jpg", ".png", ".gif" };
+
+                    if (validExts.Contains(ext.ToLower()) && product.Image.Length < 4_194_303)
+                    {
+                        //Get new image name
+                        product.ProductImage = Guid.NewGuid() + ext;
+                        //get the full path
+                        string fullPath = _webHostEnvironment.WebRootPath + "/images/";
+                        //delete the old image
+                        if (oldImageName != null && !oldImageName.ToLower().StartsWith("noimage"))
+                        {
+                            ImageUtilities.Delete(fullPath, oldImageName);
+                        }
+                        //save the new image
+                        using var memoryStream = new MemoryStream();
+                        await product.Image.CopyToAsync(memoryStream);
+                        using var img = Image.FromStream(memoryStream);
+                        int maxImgSize = 500;
+                        int maxThumbSize = 100;
+                        ImageUtilities.ResizeImage(fullPath, product.ProductImage, img, maxImgSize, maxThumbSize);
+
+                    }
+                }
+                #endregion
+
                 try
                 {
                     _context.Update(product);
@@ -237,6 +320,13 @@ namespace GadgetStore.UI.MVC.Controllers
             var product = await _context.Products.FindAsync(id);
             if (product != null)
             {
+                //get the file name
+                string? oldImageName = product.ProductImage;
+                string fullPath = _webHostEnvironment.WebRootPath + "/images/";
+                if (oldImageName != null && !oldImageName.ToLower().Contains("noimage"))
+                {
+                    ImageUtilities.Delete(fullPath, oldImageName);
+                }
                 _context.Products.Remove(product);
             }
 

@@ -10,12 +10,35 @@
         <h2>Add <span>Gadget</span></h2>
     </div>
 </section>
+
+@{
+    /*
+    * CREATE File upload steps
+    * 1) Add IFormFile Property to the buddy/partial class of the entity you're creating (Product)
+    * 2) Modify Create View
+    *      - Add the HTML attribute 'enctype="multipart/form-data"' to the <form> tag
+    *      - Remove the <input> for the original file property (<input asp-for="ProductImage"/>)
+    *      - Replace with <input type="file" asp-for="[IFormFile property name]" />
+    * 3) (ONLY DO THIS IF YOU ARE UPLOADING IMAGES - DOES NOT APPLY TO PDFs, DOCs, etc...)
+    *      - Open Package Manager Console and run the command 'install-package System.Drawing.Common'
+    *      - Create a folder in the UI project named 'Utilities'
+    *      - Add a class to the Utilities folder named 'ImageUtility'
+    *      - Copy/paste utility class code, add using statements (refer to class example)
+    *      - Add 3 using statements: using System.Drawing; using System.Drawing.2D; using System.Drawing.Imaging;
+    * 4) Add code to handle file upload in the Controller (here, it's the Products Create POST action)
+    *      - First, add a property for the controller referencing the webHostEnvironment (see ProductsController - top of the class, prop for webHostEnvironment)
+    *      - Add the webHostEnvironment to the constructor in the controller (see ProductsController constructor)
+    *      - BIND the IFormFile property in the method signature
+    *      - Add logic to process the file upload and save the file name to the db
+    *          - the file is saved to the web server (aka the UI project), the file name is copied to the DB server
+    */
+}
 @* <h4>Product</h4>
 <hr /> *@
 <div class="row mb-3">
     <div class="col-md-6 mx-auto border rounded shadow">
         <!-- mx-auto applies "margin: auto" and centers stuff left to right-->
-        <form asp-action="Create" class="p-2">
+        <form asp-action="Create" class="p-2" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-floating">
                 <label asp-for="ProductName" class="control-label d-block text-center"></label>
@@ -46,7 +69,7 @@
                 <label class="form-check-label d-block text-center">
                     @* @Html.DisplayNameFor(model => model.IsDiscontinued) *@
                     <label asp-for="IsDiscontinued" class="control-label d-block text-center"></label>
-                    <input class="form-check-input d-block text-center" asp-for="IsDiscontinued" /> 
+                    <input class="form-check-input d-block text-center" asp-for="IsDiscontinued" />
                 </label>
             </div>
             <div class="form-floating">
@@ -59,7 +82,16 @@
             </div>
             <div class="form-floating">
                 <label asp-for="ProductImage" class="control-label d-block text-center"></label>
-                <input asp-for="ProductImage" class="form-control text-center" />
+                @* <input asp-for="ProductImage" class="form-control text-center" /> *@
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">Upload</span>
+                    </div>
+                    <div class="custom-file">
+                        <input asp-for="Image" type="file" class="custom-file-input" />
+                        <label class="custom-file-label" asp-for="Image">Choose file</label>
+                    </div>
+                </div>
                 <span asp-validation-for="ProductImage" class="text-danger"></span>
             </div>
             <div class="form-floating">

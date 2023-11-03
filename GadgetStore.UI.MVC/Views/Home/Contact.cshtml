@@ -1,0 +1,54 @@
+﻿@*INSTRUCTOR BLOCK 5 - 3.C*@
+@model GadgetStore.UI.MVC.Models.ContactViewModel
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    ViewData["Title"] = "Contact Us";
+}
+<section class="product_section gray-section pb-4 pt-4 mb-4">
+    <div class="heading_container heading_center">
+        <h2>
+            Contact <span>Us</span>
+        </h2>
+    </div>
+</section>
+
+<div class="row mb-3">
+    <div class="col-md-6 offset-3">
+        <form asp-action="Contact">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-floating">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <div class="text-danger text-center mb-3">
+                    <span asp-validation-for="Name"></span>
+                </div>
+            </div>
+            <div class="form-floating">
+                <label asp-for="Email" class="control-label"></label>
+                <input asp-for="Email" class="form-control" />
+                <div class="text-danger text-center mb-3">
+                    <span asp-validation-for="Email"></span>
+                </div>
+            </div>
+            <div class="form-floating">
+                <label asp-for="Subject" class="control-label"></label>
+                <input asp-for="Subject" class="form-control" />
+                <div class="text-danger text-center mb-3">
+                    <span asp-validation-for="Subject"></span>
+                </div>
+            </div>
+            <div class="form-floating">
+                <label asp-for="Message" class="control-label"></label>
+                <textarea asp-for="Message" class="form-control" ></textarea>
+                <div class="text-danger text-center mb-3">
+                    <span asp-validation-for="Message"></span>
+                </div>
+            </div>
+            <div class="form-floating text-center">
+                <input type="submit" value="Submit" class="btn btn-primary btn-lg w-100 text-center d-inline-block" />
+            </div>
+        </form>
+    </div>
+</div>

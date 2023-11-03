@@ -2,6 +2,20 @@
 
 @{
     ViewData["Title"] = "Edit " + Model.ProductName;
+    /*
+    * EDIT File Upload Steps
+    * ** NOTE: These steps assume that you have already implemented file upload in the Create view/action.  If you have not, implement that first, and then come back to edit.
+    * 1) Modify Edit View
+    *      - Add <input type="hidden" asp-for="[PropertyName]" /> for the class's image name property
+    *      - Add enctype="multipart/form-data" to the <form>
+    *      - Comment out <input type="text"...> for original image property
+    *      - Replace with <input type="file" asp-for="[IFormFile Prop Name]" />
+    *
+    * 2) Add code to handle file upload in Controller (Edit POST)
+    *      - BIND the IFormFile property in the method signature
+    *      - Add logic to process the file upload --> save the file to the web server, save the file name to the DB
+    *      - Note: this logic is slightly different than what we needed for the create, so when doing this in StoreFront, be sure to refer to the Edit example.
+    */
 }
 
 <section class="product_section layout_padding gray-section py-4">
@@ -9,17 +23,13 @@
         <h2>Modify <span>@Model.ProductName</span></h2>
     </div>
 </section>
-
-@* <div class="row mb-3">
-    <div class="col-md-6 mx-auto">
-    </div>
-</div> *@
 <div class="row mb-3">
     <div class="col-md-6 mx-auto rounded border shadow p-5">
         <img class="img-fluid d-block mx-auto" src="~/images/@Model.ProductImage" />
-        <form asp-action="Edit">
+        <form asp-action="Edit" enctype="multipart/form-data"> <!-- added enctype for image upload -->
             <div asp-validation-summary="ModelOnly" class="text-danger text-center"></div>
             <input type="hidden" asp-for="ProductId" />
+            <input type="hidden" asp-for="ProductImage" /><!-- added for image upload-->
             <div class="form-floating">
                 <label asp-for="ProductName" class="control-label d-block text-center"></label>
                 <input asp-for="ProductName" class="form-control text-center" />
@@ -64,7 +74,15 @@
             </div>
             <div class="form-floating">
                 <label asp-for="ProductImage" class="control-label d-block text-center"></label>
-                <input asp-for="ProductImage" class="form-control text-center" />
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">Upload</span>
+                    </div>
+                    <div class="custom-file">
+                        <input asp-for="Image" type="file" class="custom-file-input" />
+                        <label class="custom-file-label" asp-for="Image">Choose file</label>
+                    </div>
+                </div>
                 <span asp-validation-for="ProductImage" class="text-danger text-center"></span>
             </div>
             <div class="form-floating">

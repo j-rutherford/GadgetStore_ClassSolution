@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
 
 namespace GadgetStore.DATA.EF.Models//Metadata
 {
@@ -14,7 +15,12 @@ namespace GadgetStore.DATA.EF.Models//Metadata
     public partial class Order { }
 
     [ModelMetadataType(typeof(ProductMetadata))]
-    public partial class Product { }
+    public partial class Product
+    {
+        //Custom property to hold the actual image file
+        [NotMapped]//doesn't go back to the database
+        public IFormFile? Image { get; set; }
+    }
 
     [ModelMetadataType(typeof(SupplierMetadata))]
     public partial class Supplier { }
